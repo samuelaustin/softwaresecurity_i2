@@ -114,6 +114,7 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'chat.app.chatApp',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
