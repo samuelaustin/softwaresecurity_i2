@@ -1,10 +1,5 @@
 from django.db import models
-
-
-class User(models.Model):
-    username = models.CharField(max_length=50)
-    password = models.CharField(max_length=50)
-
+from django.contrib.auth.models import User
 
 class Message(models.Model):
     uid = models.ForeignKey(User)

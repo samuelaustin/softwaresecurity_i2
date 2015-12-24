@@ -1,6 +1,12 @@
 # Create your views here.
-from django.http import HttpResponse
+from django.shortcuts import render
+from .models import Message
+from django.views import generic
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the chat index.")
+    message_list = Message.objects.order_by('-date')
+
+    context = {'message_list': message_list}
+
+    return render(request, 'chatApp/index.html', context)
