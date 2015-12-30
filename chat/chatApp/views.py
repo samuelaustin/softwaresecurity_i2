@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
 
 @login_required(redirect_field_name='chatApp/index.html')
 def index(request):
@@ -19,7 +20,7 @@ def index(request):
     return render(request, 'chatApp/index.html', context)
 
 def Login(request):
-    next = request.GET.get('next', '/home/')
+    next = request.GET.get('next', '/chatApp/')
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
@@ -39,3 +40,18 @@ def Login(request):
 def Logout(request):
     logout(request)
     return HttpResponseRedirect('/chatApp/login/')
+
+def Register(request):
+    if request.method == 'POST':
+    	print("YALALALALALALALALA")
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            new_user = form.save()
+            new_user.save()
+            print("GOGOGOGOGOGOGO")
+            return HttpResponseRedirect("/chatApp/")
+    else:
+        form = UserCreationForm()
+    return render(request, "chatApp/register.html", {
+        'form': form,
+    })
