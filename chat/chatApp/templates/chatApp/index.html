@@ -5,5 +5,10 @@
     {% endfor %}
     </ul>
 {% else %}
-    <p>No messages are available.</p>
+    <p>No messages are available. Be the first one to type something!</p>
 {% endif %}
+<form method="post">
+    {% csrf_token %}
+    Message: <input type="text" name="message"><br>
+    <input type="submit" value="Submit">
+</form>
