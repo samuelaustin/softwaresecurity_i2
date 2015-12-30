@@ -2,12 +2,10 @@
 from django.shortcuts import render
 from django.utils import timezone
 from .models import Message
-from django import forms
-from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
-from django.contrib.auth import authenticate, login
+from django.http import HttpResponseRedirect
+from django.contrib.auth import authenticate, login, logout
 
 @login_required(redirect_field_name='chatApp/index.html')
 def index(request):
@@ -20,24 +18,24 @@ def index(request):
     context = {'message_list': message_list}
     return render(request, 'chatApp/index.html', context)
 
-def my_login(request):
-	return HttpResponse("Hello, world. You're at the Login Page.")
+def Login(request):
+    next = request.GET.get('next', '/home/')
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
 
-def login_user(request):
-	state = "Please log in below..."
-	username = password = ''
-	if request.POST:
-	    username = request.POST.get('username')
-	    password = request.POST.get('password')
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect(next)
+            else:
+                return HttpResponse("Inactive user.")
+        else:
+            return HttpResponseRedirect('/chatApp/login/')
 
-	    user = authenticate(username=username, password=password)
-	    if user is not None:
-	        if user.is_active:
-	            login(request, user)
-	            state = "You're successfully logged in!"
-	        else:
-	            state = "Your account is not active, please contact the site admin."
-	    else:
-	        state = "Your username and/or password were incorrect."
+    return render(request, "chatApp/login.html", {'redirect_to': next})
 
-	return render_to_response('auth.html',{'state':state, 'username': username})
+def Logout(request):
+    logout(request)
+    return HttpResponseRedirect('/chatApp/login/')

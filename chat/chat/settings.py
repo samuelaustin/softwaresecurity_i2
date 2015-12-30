@@ -161,3 +161,4 @@ LOGGING = {
 }
 
 LOGIN_URL = '/chatApp/login/'
+LOGIN_REDIRECT_URL = '/chatApp/'
