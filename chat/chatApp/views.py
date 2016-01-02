@@ -29,12 +29,10 @@ def Login(request):
 		if user is not None:
 			if user.is_active:
 				login(request, user)
-				print("Het is gelukt !!!!")
 				return HttpResponseRedirect(next)
 			else:
 				return HttpResponse("Inactive user.")
 		else:
-			print("Het is NIET gelukt !!!!")
 			return HttpResponseRedirect('/chatApp/login/')
 
 	return render(request, "chatApp/login.html", {'redirect_to': next})
@@ -45,19 +43,16 @@ def Logout(request):
 
 def Register(request):
 	if request.method == 'POST':
-		print("Het is een POST ding!!!!")
 		form = UserCreationForm(request.POST)
 		if form.is_valid():
-			print("Form is valid")
 			new_user = form.save()
-			print("Form saved")
 			return HttpResponseRedirect("/chatApp/")
 		else:
 			print("Form not valid")
 			print(form.errors)
 	else:
-		print("Het is NIET een POST ding!!!!")
 		form = UserCreationForm()
 	return render(request, "chatApp/register.html", {
 		'form': form,
 	})
+	
