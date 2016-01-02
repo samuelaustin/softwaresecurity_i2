@@ -2,6 +2,7 @@
 from django.shortcuts import render
 from django.utils import timezone
 from .models import Message
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -46,6 +47,11 @@ def Register(request):
 		form = UserCreationForm(request.POST)
 		if form.is_valid():
 			new_user = form.save()
+			users = User.objects.all()
+			if(len(users) == 1):
+				new_user.is_staff = True
+				new_user.is_superuser = True
+				new_user.save()
 			return HttpResponseRedirect("/chatApp/")
 		else:
 			print("Form not valid")
@@ -55,4 +61,3 @@ def Register(request):
 	return render(request, "chatApp/register.html", {
 		'form': form,
 	})
-	
