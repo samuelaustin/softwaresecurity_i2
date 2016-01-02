@@ -50,7 +50,11 @@ def Register(request):
 		if form.is_valid():
 			print("Form is valid")
 			new_user = form.save()
+			print("Form saved")
 			return HttpResponseRedirect("/chatApp/")
+		else:
+			print("Form not valid")
+			print(form.errors)
 	else:
 		print("Het is NIET een POST ding!!!!")
 		form = UserCreationForm()
