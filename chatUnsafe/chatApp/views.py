@@ -8,13 +8,23 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
+from django.db import connection
 
 @login_required(redirect_field_name='chatApp/index.html')
 def index(request):
 	if request.method == 'POST':
+		messages = Message.objects.all()
 		input = request.POST.get('message')
-		m = Message(text=input,date=timezone.now(),uid_id=1)
-		m.save();
+		print(input)
+		cursor = connection.cursor()
+		query = "INSERT INTO chatApp_messages VALUES ("
+		query = query + str(len(messages) + 1)
+		query = query + ","
+		query = query + input
+		query = query + ","
+		query = query + str(timezone.now())
+		query = query + ");"
+		cursor.execute(query)
 
 	message_list = Message.objects.order_by('-date')
 	context = {'message_list': message_list}
